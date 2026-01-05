@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Online Voting System - Voting (Voter Detection)</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="Free Website Template" name="keywords">
+        <meta content="Free Website Template" name="description">
+
+        <!-- Favicon -->
+        <link href="static/img/favicon.ico" rel="icon">
+
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+        <!-- CSS Libraries -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+        <link href="static/lib/animate/animate.min.css" rel="stylesheet">
+        <link href="static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <link href="static/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+        <!-- Template Stylesheet -->
+        <link href="static/css/style.css" rel="stylesheet">
+    </head>
+
+<!--    <body>-->
+    <body style="background-image:url('static/img/color-handprint.jpg'); background-size:cover;">
+
+        <!-- Nav Bar Start -->
+        <div class="navbar navbar-expand-lg bg-dark navbar-dark">
+            <div class="container-fluid">
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <div class="navbar-nav ml-auto">
+                        <a href="{{ url_for('home') }}" class="nav-item nav-link">Home</a>
+                        <a href="{{ url_for('admin') }}" class="nav-item nav-link">Admin</a>
+<!--                        <a href="{{ url_for('train') }}" class="nav-item nav-link">Train</a>-->
+                        <a href="{{ url_for('voting') }}" class="nav-item nav-link active">Vote</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Nav Bar End -->
+
+<style>
+/* input[type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+} */
+
+input[type=radio] + img {
+  cursor: pointer;
+}
+
+input[type="radio"]:checked + label {
+  outline: 2px solid red;
+}
+</style>
+
+        <center>
+        <div class="col-md-8">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          {% block content %}{% endblock %}
+        </div>
+        </center>
+
+        <!-- Hero Start -->
+        <div class="hero">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="hero-text">
+                                <h1 class="text-center">Identify Voter</h1>
+                                <br>
+                                <div class="mx-auto" style="max-width:1000px; padding:20px;">
+                                    <form id="votingForm" action="{{ url_for('voting') }}" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <div class="" style="padding:20px;font-size: xx-large;">
+                                            <p style="font-size: x-large;"><b>Webcam will auto-capture in <span id="countdown">3</span> seconds or click the button to capture now.</b></p>
+                                            <p style="font-size: x-large;"><b>Please stand in front of the camera for identification. The photo will be captured automatically after 3 seconds or you can click the button to capture immediately.</b></p>
+                                        </div>
+                                        <div class="row" style="justify-content:center;">
+                                            <video id="webcamVideo" width="320" height="240" autoplay style="border:2px solid #333;"></video>
+                                            <canvas id="webcamCanvas" width="320" height="240" style="display:none;"></canvas>
+                                        </div>
+                                        <div class="row" style="justify-content:center; margin-top:10px;">
+                                            <img id="capturedImage" src="#" alt="Captured Image" style="display:none; width:320px; height:240px; border:2px solid #333;"/>
+                                        </div>
+                                        <div class="row" style="justify-content:center; margin-top:10px;">
+                                            <div class="btn-group" role="group" aria-label="capture-controls">
+                                                <button id="manualCapture" class='btn btn-primary' style="width: 225px; height: 56px;font-size:20px;">Capture Now</button>
+                                                <button id="retakeBtn" class='btn btn-warning' style="width: 120px; height: 56px;font-size:18px; margin-left:10px; display:none;">Retake</button>
+                                                <button id="submitBtn" class='btn btn-success' style="width: 120px; height: 56px;font-size:18px; margin-left:10px; display:none;">Submit</button>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="captured_data" id="capturedDataInput" />
+                                    </form>
+                                    <script src="{{ url_for('static', filename='js/webcam_capture.js') }}"></script>
+                                    <script>
+                                    // On submit, put the captured image data in the hidden input
+                                    document.getElementById('submitBtn').onclick = function(e) {
+                                        e.preventDefault();
+                                        var dataUrl = document.getElementById('capturedImage').src;
+                                        document.getElementById('capturedDataInput').value = dataUrl;
+                                        document.getElementById('votingForm').submit();
+                                    };
+                                    </script>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero End -->
+
+        <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="static/lib/easing/easing.min.js"></script>
+        <script src="static/lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="static/lib/isotope/isotope.pkgd.min.js"></script>
+        <script src="static/lib/lightbox/js/lightbox.min.js"></script>
+
+        <!-- Contact Javascript File -->
+        <script src="static/mail/jqBootstrapValidation.min.js"></script>
+        <script src="static/mail/contact.js"></script>
+
+        <!-- Template Javascript -->
+        <script src="static/js/main.js"></script>
+    </body>
+</html>

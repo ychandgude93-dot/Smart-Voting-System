@@ -1,0 +1,13 @@
+Flask
+pymysql
+pandas
+numpy
+opencv-python
+opencv-contrib-python
+Pillow
+python-dotenv
+Flask-WTF
+flask-talisman
+Flask-Limiter
+werkzeug
+requests
