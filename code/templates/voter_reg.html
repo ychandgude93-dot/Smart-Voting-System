@@ -221,13 +221,21 @@ input[type="radio"]:checked + label {
                                             document.getElementById('manualCapture').onclick = function(e) {
                                                 e.preventDefault();
                                                 captureImage();
+                                                console.log('Capture button clicked');
+                                                var img = document.getElementById('capturedImage');
+                                                console.log('Captured image src:', img.src);
+                                                console.log('Captured image style:', img.style);
+                                                console.log('Displaying captured image');
+                                                console.log('Image data URL length:', img.src.length);
+                                                console.log('Image data URL preview:', img.src.substring(0, 30) + '...');
+                                                console.log(img)
+                                                // img.style.display = 'block';
                                             };
                                             document.getElementById('retakeBtn').onclick = function(e) {
                                                 e.preventDefault();
                                                 retakeImage();
                                                 var img = document.getElementById('capturedImage');
                                                 img.src = '#';
-                                                img.style.display = 'none';
                                             };
                                             document.getElementById('submitBtn').onclick = function(e) {
                                                 e.preventDefault();
